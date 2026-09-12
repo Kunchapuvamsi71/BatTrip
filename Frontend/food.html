@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Food | BatTrip & SpiderRoam</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <header>
+        <h2>🦇 BatTrip & SpiderRoam 🕷️</h2>
+
+        <nav>
+            <a href="Index.html">Home</a>
+            <a href="destinations.html">Destinations</a>
+            <a href="planner.html">Plan Trip</a>
+            <a href="Bikes.html">Bike Rentals</a>
+            <a href="Food.html">Food</a>
+            <a href="stays.html">Stays</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section>
+            <h1>🍴 Food Recommendations</h1>
+            <p>Find food places available at your destination.</p>
+
+            <input type="text" id="destinationInput" placeholder="Enter destination (Example: Munnar)">
+
+            <button onclick="loadFood()">Search Food</button>
+        </section>
+
+        <section id="foodResults">
+            <p>Enter a destination and click <b>Search Food</b>.</p>
+        </section>
+
+    </main>
+
+    <script>
+
+        const API_BASE_URL = "http://127.0.0.1:5000";
+
+        async function loadFood() {
+
+            const destination =
+                document.getElementById("destinationInput").value.trim();
+
+            const results =
+                document.getElementById("foodResults");
+
+            if (!destination) {
+                results.innerHTML =
+                    "<p>Please enter a destination.</p>";
+                return;
+            }
+
+            results.innerHTML =
+                "<p>🔄 Loading food places...</p>";
+
+            try {
+
+                const response = await fetch(
+                    `${API_BASE_URL}/api/food?destination=${encodeURIComponent(destination)}`
+                );
+
+                const data = await response.json();
+
+                if (!response.ok || data.status !== "success") {
+
+                    results.innerHTML =
+                        `<p>❌ ${data.message || "Unable to load food places."}</p>`;
+
+                    return;
+                }
+
+                if (!data.food || data.food.length === 0) {
+
+                    results.innerHTML =
+                        `<p>😔 No food places found for ${destination}.</p>`;
+
+                    return;
+                }
+
+                results.innerHTML = "";
+
+                data.food.forEach(food => {
+
+                    const card = document.createElement("div");
+
+                    card.innerHTML = `
+                <div style="
+                    border:1px solid #ddd;
+                    border-radius:12px;
+                    padding:20px;
+                    margin:15px 0;
+                    background:#ffffff;
+                ">
+
+                    <h2>🍴 ${food.name}</h2>
+
+                    <p>
+                        <strong>Food Type:</strong>
+                        ${food.food_type}
+                    </p>
+
+                    <p>
+                        <strong>Average Cost:</strong>
+                        ₹${food.average_cost}
+                    </p>
+
+                    <p>
+                        <strong>Rating:</strong>
+                        ⭐ ${food.rating}
+                    </p>
+
+                    <p>
+                        <strong>Speciality:</strong>
+                        ${food.speciality}
+                    </p>
+
+                    <p>
+                        <strong>Location:</strong>
+                        ${food.address}
+                    </p>
+
+                </div>
+            `;
+
+                    results.appendChild(card);
+
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                results.innerHTML = `
+            <p>
+                ❌ Cannot connect to BatTrip backend.
+                Make sure Flask is running.
+            </p>
+        `;
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

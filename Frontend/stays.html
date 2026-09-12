@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stay Finder | BatTrip & SpiderRoam</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .search-box {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .results {
+            margin-top: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .card h2 {
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #4b5563;
+            margin: 7px 0;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e5e7eb;
+            padding: 5px 9px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #111827;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 20px;
+            }
+
+            header h1 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🦇 BatTrip & SpiderRoam 🕷️</h1>
+    <p>🏨 Smart Stay Finder</p>
+</header>
+
+<div class="container">
+
+    <div class="search-box">
+
+        <label for="destination">
+            📍 Destination
+        </label>
+
+        <input
+            type="text"
+            id="destination"
+            placeholder="Example: Munnar"
+        >
+
+        <label for="stayType">
+            🏨 Stay Type
+        </label>
+
+        <select id="stayType">
+            <option value="budget">Budget Stay</option>
+            <option value="standard">Standard Hotel</option>
+            <option value="premium">Premium Resort</option>
+        </select>
+
+        <label for="people">
+            👥 Number of People
+        </label>
+
+        <input
+            type="number"
+            id="people"
+            value="2"
+            min="1"
+        >
+
+        <label for="nights">
+            🌙 Number of Nights
+        </label>
+
+        <input
+            type="number"
+            id="nights"
+            value="2"
+            min="1"
+        >
+
+        <button type="button" onclick="findStay()">
+            🔍 Find Stays
+        </button>
+
+    </div>
+
+    <div class="results" id="results"></div>
+
+    <a class="back" href="planner.html">
+        ← Back to Trip Planner
+    </a>
+
+</div>
+
+<script>
+
+const stays = [
+
+    {
+        name: "Green Valley Homestay",
+        destination: "Munnar",
+        type: "budget",
+        price: 900,
+        rating: 4.3,
+        facilities: "WiFi • Parking • Breakfast"
+    },
+
+    {
+        name: "Munnar Hills Hotel",
+        destination: "Munnar",
+        type: "standard",
+        price: 1800,
+        rating: 4.5,
+        facilities: "WiFi • Parking • Restaurant"
+    },
+
+    {
+        name: "Mountain View Resort",
+        destination: "Munnar",
+        type: "premium",
+        price: 4500,
+        rating: 4.7,
+        facilities: "Pool • Restaurant • Mountain View"
+    },
+
+    {
+        name: "Alleppey Budget Stay",
+        destination: "Alleppey",
+        type: "budget",
+        price: 800,
+        rating: 4.2,
+        facilities: "WiFi • Parking"
+    },
+
+    {
+        name: "Alleppey Lake Hotel",
+        destination: "Alleppey",
+        type: "standard",
+        price: 1700,
+        rating: 4.4,
+        facilities: "WiFi • Restaurant • Parking"
+    },
+
+    {
+        name: "Backwater Premium Resort",
+        destination: "Alleppey",
+        type: "premium",
+        price: 5000,
+        rating: 4.8,
+        facilities: "Pool • Restaurant • Backwater View"
+    },
+
+    {
+        name: "Kochi City Homestay",
+        destination: "Kochi",
+        type: "budget",
+        price: 1000,
+        rating: 4.2,
+        facilities: "WiFi • Parking"
+    },
+
+    {
+        name: "Fort Kochi Hotel",
+        destination: "Kochi",
+        type: "standard",
+        price: 2200,
+        rating: 4.5,
+        facilities: "WiFi • Restaurant • Parking"
+    },
+
+    {
+        name: "Kochi Luxury Resort",
+        destination: "Kochi",
+        type: "premium",
+        price: 5500,
+        rating: 4.8,
+        facilities: "Pool • Restaurant • Sea View"
+    }
+
+];
+
+
+function findStay() {
+
+    const destination =
+        document.getElementById("destination").value.trim();
+
+    const stayType =
+        document.getElementById("stayType").value;
+
+    const people =
+        Number(document.getElementById("people").value);
+
+    const nights =
+        Number(document.getElementById("nights").value);
+
+    const results =
+        document.getElementById("results");
+
+
+    if (destination === "") {
+
+        results.innerHTML =
+            "<div class='card'><h2>⚠️ Enter a destination</h2><p>Please enter a destination such as Munnar, Alleppey or Kochi.</p></div>";
+
+        return;
+    }
+
+
+    const matches = stays.filter(function(stay) {
+
+        return stay.destination.toLowerCase() ===
+               destination.toLowerCase()
+               &&
+               stay.type === stayType;
+
+    });
+
+
+    if (matches.length === 0) {
+
+        results.innerHTML =
+            "<div class='card'><h2>😔 No sample stays found</h2><p>Try Munnar, Alleppey or Kochi.</p></div>";
+
+        return;
+    }
+
+
+    let output = "";
+
+
+    matches.forEach(function(stay) {
+
+        const total =
+            stay.price * nights;
+
+
+        output += `
+
+        <div class="card">
+
+            <h2>🏨 ${stay.name}</h2>
+
+            <p>📍 ${stay.destination}</p>
+
+            <p>⭐ Rating: ${stay.rating}/5</p>
+
+            <p>👥 Suitable for: ${people} people</p>
+
+            <p>🌙 ${nights} night(s)</p>
+
+            <p>🛏️ Facilities: ${stay.facilities}</p>
+
+            <div class="price">
+                ₹${stay.price.toLocaleString()} / night
+            </div>
+
+            <p>
+                💰 Estimated total:
+                <strong>₹${total.toLocaleString()}</strong>
+            </p>
+
+            <span class="tag">
+                ${stayType.toUpperCase()} STAY
+            </span>
+
+        </div>
+
+        `;
+
+    });
+
+
+    results.innerHTML = output;
+
+}
+
+</script>
+
+</body>
+</html>

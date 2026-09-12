@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Planner - BatTrip & SpiderRoam</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 18px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .location-btn {
+            background: #16a34a;
+            width: 100%;
+        }
+
+        .add-btn {
+            background: #7c3aed;
+        }
+
+        .build-btn {
+            width: 100%;
+            background: #dc2626;
+            font-size: 17px;
+            padding: 15px;
+        }
+
+        .destination {
+            background: #eef2ff;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            margin-left: 10px;
+            padding: 7px 10px;
+        }
+
+        .result {
+            background: #ecfdf5;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 10px;
+            line-height: 1.8;
+        }
+
+        .error {
+            background: #fee2e2;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+
+        .day {
+            background: #f8fafc;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border-left: 5px solid #2563eb;
+        }
+
+        .day h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="box">
+            <h1>🦇 BatTrip & SpiderRoam 🕷️</h1>
+            <p style="text-align:center;">
+                AI-Powered Smart Tourism & Budget Planner
+            </p>
+        </div>
+
+        <div class="box">
+
+            <h2>📍 Starting Location</h2>
+
+            <input type="text" id="startLocation" placeholder="Example: Trichy">
+
+            <button class="location-btn" onclick="useCurrentLocation()">
+                📍 Use My Current Location
+            </button>
+
+            <p id="locationStatus"></p>
+
+        </div>
+
+        <div class="box">
+
+            <h2>🗺️ Destinations</h2>
+
+            <input type="text" id="destination" placeholder="Example: Munnar">
+
+            <button class="add-btn" onclick="addPlace()">
+                + Add
+            </button>
+
+            <div id="list">
+                <p>No destinations added yet.</p>
+            </div>
+
+        </div>
+
+        <div class="box">
+
+            <h2>📋 Trip Details</h2>
+
+            <label>Number of Days</label>
+            <input type="number" id="days" value="5" min="1">
+
+            <label>Number of People</label>
+            <input type="number" id="people" value="2" min="1">
+
+            <label>Total Budget (₹)</label>
+            <input type="number" id="budget" value="15000" min="0">
+
+            <label>Travel Interest</label>
+
+            <select id="interest">
+                <option>Nature</option>
+                <option>Adventure</option>
+                <option>Beach</option>
+                <option>Culture</option>
+                <option>History</option>
+                <option>Wildlife</option>
+                <option>Spiritual</option>
+                <option>Food</option>
+                <option>Photography</option>
+                <option>Relaxation</option>
+                <option>Family</option>
+            </select>
+
+        </div>
+
+        <div class="box">
+
+            <h2>🏍️ Transport</h2>
+
+            <label>Transport Method</label>
+
+            <select id="transport">
+                <option>Own Bike</option>
+                <option>Own Car</option>
+                <option>Rental Bike</option>
+                <option>Rental Car</option>
+                <option>Public Transport</option>
+            </select>
+
+            <label>Vehicle Mileage (km/L)</label>
+
+            <input type="number" id="mileage" value="35" min="1">
+
+            <label>Petrol Price (₹/L)</label>
+
+            <input type="number" id="petrol" value="114" min="1">
+
+        </div>
+
+        <div class="box">
+
+            <h2>🏨 Accommodation & Food</h2>
+
+            <label>Accommodation</label>
+
+            <select id="stay">
+                <option value="800">Budget - ₹800/person/night</option>
+                <option value="1500">Standard - ₹1500/person/night</option>
+                <option value="3000">Premium - ₹3000/person/night</option>
+            </select>
+
+            <label>Food Cost (₹ per person/day)</label>
+
+            <input type="number" id="food" value="400" min="0">
+
+            <label>Activity Cost (₹ per person)</label>
+
+            <input type="number" id="activity" value="300" min="0">
+
+        </div>
+
+        <div class="box">
+
+            <button class="build-btn" onclick="buildTrip()">
+                🚀 Build My Trip
+            </button>
+
+            <div id="output"></div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        let places = [];
+
+
+        /* =========================
+           ADD DESTINATION
+        ========================= */
+
+        function addPlace() {
+
+            let input = document.getElementById("destination");
+
+            let name = input.value.trim();
+
+            if (name === "") {
+
+                alert("Enter a destination");
+
+                return;
+            }
+
+            places.push(name);
+
+            input.value = "";
+
+            showPlaces();
+        }
+
+
+        /* =========================
+           SHOW DESTINATIONS
+        ========================= */
+
+        function showPlaces() {
+
+            let list = document.getElementById("list");
+
+            list.innerHTML = "";
+
+            for (let i = 0; i < places.length; i++) {
+
+                let div = document.createElement("div");
+
+                div.className = "destination";
+
+                div.innerHTML =
+                    (i + 1) +
+                    ". " +
+                    places[i] +
+                    ' <button class="remove-btn" onclick="removePlace(' +
+                    i +
+                    ')">Remove</button>';
+
+                list.appendChild(div);
+            }
+        }
+
+
+        /* =========================
+           REMOVE DESTINATION
+        ========================= */
+
+        function removePlace(index) {
+
+            places.splice(index, 1);
+
+            showPlaces();
+        }
+
+
+        /* =========================
+           CURRENT LOCATION
+        ========================= */
+
+        function useCurrentLocation() {
+
+            let status =
+                document.getElementById("locationStatus");
+
+            if (!navigator.geolocation) {
+
+                status.innerHTML =
+                    "❌ Location is not supported. Please enter your location manually.";
+
+                return;
+            }
+
+            status.innerHTML =
+                "📍 Getting your current location...";
+
+            navigator.geolocation.getCurrentPosition(
+
+                function (position) {
+
+                    let latitude =
+                        position.coords.latitude;
+
+                    let longitude =
+                        position.coords.longitude;
+
+                    status.innerHTML =
+                        "✅ Location detected: " +
+                        latitude.toFixed(4) +
+                        ", " +
+                        longitude.toFixed(4);
+                },
+
+                function (error) {
+
+                    status.innerHTML =
+                        "❌ Location permission denied. Please enter your starting location manually.";
+                }
+            );
+        }
+
+
+        /* =========================
+           GEOCODING
+        ========================= */
+
+        async function getCoordinates(place) {
+
+            let url =
+                "https://nominatim.openstreetmap.org/search?q=" +
+                encodeURIComponent(place) +
+                "&format=json&limit=1";
+
+            try {
+
+                let response = await fetch(url);
+
+                let data = await response.json();
+
+                if (data.length === 0) {
+
+                    return null;
+                }
+
+                return {
+
+                    lat: parseFloat(data[0].lat),
+
+                    lon: parseFloat(data[0].lon)
+                };
+
+            }
+
+            catch (error) {
+
+                return null;
+            }
+        }
+
+
+        /* =========================
+           ROAD DISTANCE
+        ========================= */
+
+        async function getDistance(start, destinations) {
+
+            let totalDistance = 0;
+
+            let current = start;
+
+            for (let i = 0; i < destinations.length; i++) {
+
+                let next =
+                    await getCoordinates(destinations[i]);
+
+                if (!next) {
+
+                    continue;
+                }
+
+                let url =
+                    "https://router.project-osrm.org/route/v1/driving/" +
+                    current.lon +
+                    "," +
+                    current.lat +
+                    ";" +
+                    next.lon +
+                    "," +
+                    next.lat +
+                    "?overview=false";
+
+                try {
+
+                    let response =
+                        await fetch(url);
+
+                    let data =
+                        await response.json();
+
+                    if (
+                        data.routes &&
+                        data.routes.length > 0
+                    ) {
+
+                        totalDistance +=
+                            data.routes[0].distance / 1000;
+                    }
+
+                }
+
+                catch (error) {
+
+                    console.log(error);
+                }
+
+                current = next;
+            }
+
+            return totalDistance;
+        }
+
+
+        /* =========================
+           BUILD TRIP
+        ========================= */
+
+        async function buildTrip() {
+
+            let output =
+                document.getElementById("output");
+
+            let startName =
+                document
+                    .getElementById("startLocation")
+                    .value
+                    .trim();
+
+            let days =
+                parseInt(
+                    document.getElementById("days").value
+                );
+
+            let people =
+                parseInt(
+                    document.getElementById("people").value
+                );
+
+            let budget =
+                parseFloat(
+                    document.getElementById("budget").value
+                );
+
+            let mileage =
+                parseFloat(
+                    document.getElementById("mileage").value
+                );
+
+            let petrol =
+                parseFloat(
+                    document.getElementById("petrol").value
+                );
+
+            let food =
+                parseFloat(
+                    document.getElementById("food").value
+                );
+
+            let activity =
+                parseFloat(
+                    document.getElementById("activity").value
+                );
+
+            let stay =
+                parseFloat(
+                    document.getElementById("stay").value
+                );
+
+            let transport =
+                document.getElementById("transport").value;
+
+            let interest =
+                document.getElementById("interest").value;
+
+
+            if (startName === "") {
+
+                alert("Please enter starting location.");
+
+                return;
+            }
+
+
+            if (places.length === 0) {
+
+                alert("Please add at least one destination.");
+
+                return;
+            }
+
+
+            output.innerHTML =
+                '<div class="result">' +
+                '⏳ Building your trip... Please wait.' +
+                '</div>';
+
+
+            let start =
+                await getCoordinates(startName);
+
+
+            if (!start) {
+
+                output.innerHTML =
+                    '<div class="error">' +
+                    '❌ Starting location not found. Please check the name.' +
+                    '</div>';
+
+                return;
+            }
+
+
+            let distance =
+                await getDistance(start, places);
+
+
+            let fuelCost = 0;
+
+            let rentalCost = 0;
+
+            let transportCost = 0;
+
+
+            if (
+                transport === "Own Bike" ||
+                transport === "Own Car"
+            ) {
+
+                let fuelNeeded =
+                    distance / mileage;
+
+                fuelCost =
+                    fuelNeeded * petrol;
+            }
+
+
+            else if (transport === "Rental Bike") {
+
+                let fuelNeeded =
+                    distance / mileage;
+
+                fuelCost =
+                    fuelNeeded * petrol;
+
+                rentalCost =
+                    700 * days;
+            }
+
+
+            else if (transport === "Rental Car") {
+
+                let fuelNeeded =
+                    distance / mileage;
+
+                fuelCost =
+                    fuelNeeded * petrol;
+
+                rentalCost =
+                    2500 * days;
+            }
+
+
+            else if (transport === "Public Transport") {
+
+                transportCost =
+                    distance * 4;
+            }
+
+
+            let nights =
+                Math.max(days - 1, 1);
+
+
+            let stayCost =
+                stay *
+                people *
+                nights;
+
+
+            let foodCost =
+                food *
+                people *
+                days;
+
+
+            let activityCost =
+                activity *
+                people;
+
+
+            let total =
+                fuelCost +
+                rentalCost +
+                transportCost +
+                stayCost +
+                foodCost +
+                activityCost;
+
+
+            let remaining =
+                budget - total;
+
+
+            let status;
+
+
+            if (remaining >= 0) {
+
+                status =
+                    "✅ Within Budget";
+
+            }
+
+            else if (remaining >= -2000) {
+
+                status =
+                    "⚠️ Slightly Over Budget";
+
+            }
+
+            else {
+
+                status =
+                    "❌ Over Budget";
+            }
+
+
+            let fuelNeeded =
+                mileage > 0
+                    ? distance / mileage
+                    : 0;
+
+
+            /* =========================
+               TRIP SUMMARY
+            ========================= */
+
+            let html = "";
+
+
+            html +=
+                '<div class="result">';
+
+            html +=
+                "<h2>🎯 Trip Summary</h2>";
+
+            html +=
+                "<b>Starting Location:</b> " +
+                startName +
+                "<br>";
+
+            html +=
+                "<b>Destinations:</b> " +
+                places.join(", ") +
+                "<br>";
+
+            html +=
+                "<b>Days:</b> " +
+                days +
+                "<br>";
+
+            html +=
+                "<b>People:</b> " +
+                people +
+                "<br>";
+
+            html +=
+                "<b>Interest:</b> " +
+                interest +
+                "<br>";
+
+            html +=
+                "<b>Transport:</b> " +
+                transport +
+                "<br><br>";
+
+            html +=
+                "🛣️ <b>Approx. Road Distance:</b> " +
+                distance.toFixed(1) +
+                " km<br>";
+
+            html +=
+                "⛽ <b>Fuel Required:</b> " +
+                fuelNeeded.toFixed(1) +
+                " L<br>";
+
+            html +=
+                "⛽ <b>Fuel Cost:</b> ₹" +
+                fuelCost.toFixed(0) +
+                "<br>";
+
+            html +=
+                "🏨 <b>Accommodation:</b> ₹" +
+                stayCost.toFixed(0) +
+                "<br>";
+
+            html +=
+                "🍴 <b>Food:</b> ₹" +
+                foodCost.toFixed(0) +
+                "<br>";
+
+            html +=
+                "🎟️ <b>Activities:</b> ₹" +
+                activityCost.toFixed(0) +
+                "<br>";
+
+            html +=
+                "🚕 <b>Rental/Transport:</b> ₹" +
+                (rentalCost + transportCost).toFixed(0) +
+                "<br><br>";
+
+            html +=
+                "<h2>💰 Total Cost: ₹" +
+                total.toFixed(0) +
+                "</h2>";
+
+            html +=
+                "<b>Budget:</b> ₹" +
+                budget.toFixed(0) +
+                "<br>";
+
+            html +=
+                "<b>Remaining:</b> ₹" +
+                remaining.toFixed(0) +
+                "<br>";
+
+            html +=
+                "<b>Status:</b> " +
+                status;
+
+            html +=
+                "</div>";
+
+
+            /* =========================
+               SMART ITINERARY
+            ========================= */
+
+            html +=
+                '<div class="box">';
+
+            html +=
+                "<h2>📅 Day-by-Day Itinerary</h2>";
+
+
+            /*
+               Distribute days among destinations.
+        
+               Example:
+               5 days + 3 destinations
+        
+               Day 1 → Destination 1
+               Day 2 → Destination 1
+               Day 3 → Destination 2
+               Day 4 → Destination 2
+               Day 5 → Destination 3
+            */
+
+
+            let baseDays =
+                Math.floor(days / places.length);
+
+            let extraDays =
+                days % places.length;
+
+
+            let currentDay = 1;
+
+
+            for (
+                let i = 0;
+                i < places.length;
+                i++
+            ) {
+
+                let daysForPlace =
+                    baseDays;
+
+
+                if (i < extraDays) {
+
+                    daysForPlace++;
+                }
+
+
+                for (
+                    let j = 0;
+                    j < daysForPlace;
+                    j++
+                ) {
+
+                    html +=
+                        '<div class="day">';
+
+                    html +=
+                        "<h3>Day " +
+                        currentDay +
+                        " — " +
+                        places[i] +
+                        "</h3>";
+
+                    html +=
+                        "<p>📍 Explore " +
+                        places[i] +
+                        ".</p>";
+
+                    html +=
+                        "<p>🎯 Focus: " +
+                        interest +
+                        "</p>";
+
+                    html +=
+                        "<p>🌅 Morning: Explore popular attractions.</p>";
+
+                    html +=
+                        "<p>🍴 Afternoon: Enjoy local food and activities.</p>";
+
+                    html +=
+                        "<p>🌙 Evening: Relax and explore nearby places.</p>";
+
+                    html +=
+                        "</div>";
+
+
+                    currentDay++;
+                }
+            }
+
+
+            html +=
+                "</div>";
+
+
+            output.innerHTML =
+                html;
+        }
+
+    </script>
+    <script src="js/planner.js"></script>
+</body>
+
+</html>

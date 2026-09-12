@@ -1,0 +1,51 @@
+/* BatTrip & SpiderRoam - Responsive Styles */
+
+@media (max-width: 768px) {
+
+    .container {
+        width: 94%;
+    }
+
+    nav {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero {
+        padding: 45px 15px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    input,
+    select,
+    button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .hero h1 {
+        font-size: 27px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}

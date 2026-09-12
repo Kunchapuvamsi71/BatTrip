@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bike Rentals | BatTrip & SpiderRoam</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <header>
+        <h2>🦇 BatTrip & SpiderRoam 🕷️</h2>
+
+        <nav>
+            <a href="Index.html">Home</a>
+            <a href="destinations.html">Destinations</a>
+            <a href="planner.html">Plan Trip</a>
+            <a href="Bikes.html">Bike Rentals</a>
+            <a href="Food.html">Food</a>
+            <a href="stays.html">Stays</a>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <section>
+            <h1>🏍️ Bike Rentals</h1>
+            <p>Find rental bikes available at your destination.</p>
+
+            <input type="text" id="destinationInput" placeholder="Enter destination (Example: Munnar)">
+
+            <button onclick="loadBikes()">Search Bikes</button>
+        </section>
+
+
+        <section id="bikeResults">
+
+            <p>Enter a destination and click <b>Search Bikes</b>.</p>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const API_BASE_URL = "http://127.0.0.1:5000";
+
+
+        async function loadBikes() {
+
+            const destination =
+                document.getElementById("destinationInput").value.trim();
+
+            const results =
+                document.getElementById("bikeResults");
+
+
+            if (!destination) {
+
+                results.innerHTML =
+                    "<p>Please enter a destination.</p>";
+
+                return;
+            }
+
+
+            results.innerHTML =
+                "<p>🔄 Loading bike rentals...</p>";
+
+
+            try {
+
+                const response = await fetch(
+                    `${API_BASE_URL}/api/bikes?destination=${encodeURIComponent(destination)}`
+                );
+
+
+                const data = await response.json();
+
+
+                if (!response.ok || data.status !== "success") {
+
+                    results.innerHTML =
+                        `<p>❌ ${data.message || "Unable to load bikes."}</p>`;
+
+                    return;
+                }
+
+
+                if (!data.bikes || data.bikes.length === 0) {
+
+                    results.innerHTML =
+                        `<p>😔 No bike rentals found for ${destination}.</p>`;
+
+                    return;
+                }
+
+
+                results.innerHTML = "";
+
+
+                data.bikes.forEach(bike => {
+
+                    const card = document.createElement("div");
+
+                    card.innerHTML = `
+                <div style="
+                    border:1px solid #ddd;
+                    border-radius:12px;
+                    padding:20px;
+                    margin:15px 0;
+                    background:#ffffff;
+                ">
+
+                    <h2>🏍️ ${bike.shop_name}</h2>
+
+                    <p>
+                        <strong>Bike:</strong>
+                        ${bike.bike_type}
+                    </p>
+
+                    <p>
+                        <strong>Price:</strong>
+                        ₹${bike.price_per_day} / day
+                    </p>
+
+                    <p>
+                        <strong>Rating:</strong>
+                        ⭐ ${bike.rating}
+                    </p>
+
+                    <p>
+                        <strong>Location:</strong>
+                        ${bike.address}
+                    </p>
+
+                    <p>
+                        <strong>Contact:</strong>
+                        ${bike.contact}
+                    </p>
+
+                </div>
+            `;
+
+                    results.appendChild(card);
+
+                });
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                results.innerHTML = `
+            <p>
+                ❌ Cannot connect to BatTrip backend.
+                Make sure Flask is running.
+            </p>
+        `;
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
