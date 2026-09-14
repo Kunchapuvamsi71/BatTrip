@@ -17,24 +17,33 @@ concurrency:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload Frontend
+      - name: Prepare website
+        run: |
+          mkdir -p site
+          cp -R Frontend/. site/
+          echo "Website files:"
+          find site -maxdepth 2 -type f | sort
+          echo "Checking index.html..."
+          test -f site/index.html
+
+      - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './Frontend'
+          path: ./site
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
