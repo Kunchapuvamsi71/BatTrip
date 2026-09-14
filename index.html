@@ -41,6 +41,10 @@
             font-weight: bold;
         }
 
+        nav a:hover {
+            color: #7c3aed;
+        }
+
         .hero {
             min-height: 600px;
             padding: 100px 7%;
@@ -155,8 +159,15 @@
                 text-align: center;
             }
 
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
             nav a {
-                margin: 0 7px;
+                margin: 0 5px;
                 font-size: 14px;
             }
 
@@ -190,6 +201,7 @@
 
 <body>
 
+    <!-- HEADER -->
     <header>
 
         <div class="logo">
@@ -197,20 +209,25 @@
         </div>
 
         <nav>
-            <a href="#">Home</a>
 
-            <a href="Frontend/explore.html">
+            <a href="./index.html">
+                Home
+            </a>
+
+            <a href="./Frontend/explore.html">
                 Explore
             </a>
 
-            <a href="Frontend/planner.html">
+            <a href="./Frontend/planner.html">
                 Trip Planner
             </a>
+
         </nav>
 
     </header>
 
 
+    <!-- HERO -->
     <section class="hero">
 
         <div class="hero-content">
@@ -231,7 +248,7 @@
             </p>
 
             <button
-                onclick="window.location.href='Frontend/planner.html'">
+                onclick="window.location.href='./Frontend/planner.html'">
                 🚀 Start Planning
             </button>
 
@@ -240,6 +257,7 @@
     </section>
 
 
+    <!-- FEATURES -->
     <section class="features" id="features">
 
         <div class="section-title">
@@ -327,6 +345,7 @@
     </section>
 
 
+    <!-- PLANNER CTA -->
     <section class="planner" id="planner">
 
         <h2>
@@ -341,20 +360,20 @@
         <br>
 
         <button
-            onclick="window.location.href='Frontend/planner.html'">
+            onclick="window.location.href='./Frontend/planner.html'">
             🚀 Build My Trip
         </button>
 
     </section>
 
 
+    <!-- FOOTER -->
     <footer>
 
         © 2026 BatTrip & SpiderRoam |
         AI-Powered Smart Tourism
 
     </footer>
-
 
 </body>
 
