@@ -18,14 +18,13 @@
 
         <nav>
             <a href="Index.html">Home</a>
-            <a href="destinations.html">Destinations</a>
+            <a href="explore.html">Explore</a>
             <a href="planner.html">Plan Trip</a>
-            <a href="Bikes.html">Bike Rentals</a>
-            <a href="Food.html">Food</a>
+            <a href="bikes.html">Bike Rentals</a>
+            <a href="food.html">Food</a>
             <a href="stays.html">Stays</a>
         </nav>
     </header>
-
 
     <main>
 
@@ -38,137 +37,62 @@
             <button onclick="loadBikes()">Search Bikes</button>
         </section>
 
-
         <section id="bikeResults">
-
             <p>Enter a destination and click <b>Search Bikes</b>.</p>
-
         </section>
 
     </main>
 
-
     <script>
-
         const API_BASE_URL = "http://127.0.0.1:5000";
 
-
         async function loadBikes() {
-
-            const destination =
-                document.getElementById("destinationInput").value.trim();
-
-            const results =
-                document.getElementById("bikeResults");
-
+            const destination = document.getElementById("destinationInput").value.trim();
+            const results = document.getElementById("bikeResults");
 
             if (!destination) {
-
-                results.innerHTML =
-                    "<p>Please enter a destination.</p>";
-
+                results.innerHTML = "<p>Please enter a destination.</p>";
                 return;
             }
 
-
-            results.innerHTML =
-                "<p>🔄 Loading bike rentals...</p>";
-
+            results.innerHTML = "<p>🔄 Loading bike rentals...</p>";
 
             try {
-
-                const response = await fetch(
-                    `${API_BASE_URL}/api/bikes?destination=${encodeURIComponent(destination)}`
-                );
-
-
+                const response = await fetch(`${API_BASE_URL}/api/bikes?destination=${encodeURIComponent(destination)}`);
                 const data = await response.json();
 
-
                 if (!response.ok || data.status !== "success") {
-
-                    results.innerHTML =
-                        `<p>❌ ${data.message || "Unable to load bikes."}</p>`;
-
+                    results.innerHTML = `<p>❌ ${data.message || "Unable to load bikes."}</p>`;
                     return;
                 }
-
 
                 if (!data.bikes || data.bikes.length === 0) {
-
-                    results.innerHTML =
-                        `<p>😔 No bike rentals found for ${destination}.</p>`;
-
+                    results.innerHTML = `<p>😔 No bike rentals found for ${destination}.</p>`;
                     return;
                 }
 
-
                 results.innerHTML = "";
-
-
                 data.bikes.forEach(bike => {
-
                     const card = document.createElement("div");
-
                     card.innerHTML = `
-                <div style="
-                    border:1px solid #ddd;
-                    border-radius:12px;
-                    padding:20px;
-                    margin:15px 0;
-                    background:#ffffff;
-                ">
-
-                    <h2>🏍️ ${bike.shop_name}</h2>
-
-                    <p>
-                        <strong>Bike:</strong>
-                        ${bike.bike_type}
-                    </p>
-
-                    <p>
-                        <strong>Price:</strong>
-                        ₹${bike.price_per_day} / day
-                    </p>
-
-                    <p>
-                        <strong>Rating:</strong>
-                        ⭐ ${bike.rating}
-                    </p>
-
-                    <p>
-                        <strong>Location:</strong>
-                        ${bike.address}
-                    </p>
-
-                    <p>
-                        <strong>Contact:</strong>
-                        ${bike.contact}
-                    </p>
-
-                </div>
-            `;
-
+                        <div style="border:1px solid #ddd;border-radius:12px;padding:20px;margin:15px 0;background:#ffffff;">
+                            <h2>🏍️ ${bike.shop_name}</h2>
+                            <p><strong>Bike:</strong> ${bike.bike_type}</p>
+                            <p><strong>Price:</strong> ₹${bike.price_per_day} / day</p>
+                            <p><strong>Rating:</strong> ⭐ ${bike.rating}</p>
+                            <p><strong>Location:</strong> ${bike.address}</p>
+                            <p><strong>Contact:</strong> ${bike.contact}</p>
+                        </div>
+                    `;
                     results.appendChild(card);
-
                 });
-
-
             } catch (error) {
-
                 console.error(error);
-
                 results.innerHTML = `
-            <p>
-                ❌ Cannot connect to BatTrip backend.
-                Make sure Flask is running.
-            </p>
-        `;
-
+                    <p>❌ Cannot connect to BatTrip backend. Make sure Flask is running on ${API_BASE_URL}.</p>
+                `;
             }
-
         }
-
     </script>
 
 </body>

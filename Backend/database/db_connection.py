@@ -9,6 +9,9 @@ def get_db_connection():
         user=Config.MYSQL_USER,
         password=Config.MYSQL_PASSWORD,
         database=Config.MYSQL_DATABASE,
+        port=Config.MYSQL_PORT,
+        autocommit=False,
+        connection_timeout=10,
     )
 
     return connection

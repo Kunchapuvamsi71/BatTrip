@@ -10,11 +10,9 @@ from routes.accommodation_routes import accommodation_bp
 from routes.bike_routes import bike_bp
 from routes.food_routes import food_bp
 
-
 app = Flask(__name__)
 
-CORS(app)
-
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Register all routes
 app.register_blueprint(destination_bp)
@@ -44,4 +42,4 @@ def test():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)

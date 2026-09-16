@@ -18,10 +18,10 @@
 
         <nav>
             <a href="Index.html">Home</a>
-            <a href="destinations.html">Destinations</a>
+            <a href="explore.html">Explore</a>
             <a href="planner.html">Plan Trip</a>
-            <a href="Bikes.html">Bike Rentals</a>
-            <a href="Food.html">Food</a>
+            <a href="bikes.html">Bike Rentals</a>
+            <a href="food.html">Food</a>
             <a href="stays.html">Stays</a>
         </nav>
     </header>
@@ -44,112 +44,55 @@
     </main>
 
     <script>
-
         const API_BASE_URL = "http://127.0.0.1:5000";
 
         async function loadFood() {
-
-            const destination =
-                document.getElementById("destinationInput").value.trim();
-
-            const results =
-                document.getElementById("foodResults");
+            const destination = document.getElementById("destinationInput").value.trim();
+            const results = document.getElementById("foodResults");
 
             if (!destination) {
-                results.innerHTML =
-                    "<p>Please enter a destination.</p>";
+                results.innerHTML = "<p>Please enter a destination.</p>";
                 return;
             }
 
-            results.innerHTML =
-                "<p>🔄 Loading food places...</p>";
+            results.innerHTML = "<p>🔄 Loading food places...</p>";
 
             try {
-
-                const response = await fetch(
-                    `${API_BASE_URL}/api/food?destination=${encodeURIComponent(destination)}`
-                );
-
+                const response = await fetch(`${API_BASE_URL}/api/food?destination=${encodeURIComponent(destination)}`);
                 const data = await response.json();
 
                 if (!response.ok || data.status !== "success") {
-
-                    results.innerHTML =
-                        `<p>❌ ${data.message || "Unable to load food places."}</p>`;
-
+                    results.innerHTML = `<p>❌ ${data.message || "Unable to load food places."}</p>`;
                     return;
                 }
 
                 if (!data.food || data.food.length === 0) {
-
-                    results.innerHTML =
-                        `<p>😔 No food places found for ${destination}.</p>`;
-
+                    results.innerHTML = `<p>😔 No food places found for ${destination}.</p>`;
                     return;
                 }
 
                 results.innerHTML = "";
-
                 data.food.forEach(food => {
-
                     const card = document.createElement("div");
-
                     card.innerHTML = `
-                <div style="
-                    border:1px solid #ddd;
-                    border-radius:12px;
-                    padding:20px;
-                    margin:15px 0;
-                    background:#ffffff;
-                ">
-
-                    <h2>🍴 ${food.name}</h2>
-
-                    <p>
-                        <strong>Food Type:</strong>
-                        ${food.food_type}
-                    </p>
-
-                    <p>
-                        <strong>Average Cost:</strong>
-                        ₹${food.average_cost}
-                    </p>
-
-                    <p>
-                        <strong>Rating:</strong>
-                        ⭐ ${food.rating}
-                    </p>
-
-                    <p>
-                        <strong>Speciality:</strong>
-                        ${food.speciality}
-                    </p>
-
-                    <p>
-                        <strong>Location:</strong>
-                        ${food.address}
-                    </p>
-
-                </div>
-            `;
-
+                        <div style="border:1px solid #ddd;border-radius:12px;padding:20px;margin:15px 0;background:#ffffff;">
+                            <h2>🍴 ${food.name}</h2>
+                            <p><strong>Food Type:</strong> ${food.food_type}</p>
+                            <p><strong>Average Cost:</strong> ₹${food.average_cost}</p>
+                            <p><strong>Rating:</strong> ⭐ ${food.rating}</p>
+                            <p><strong>Speciality:</strong> ${food.speciality}</p>
+                            <p><strong>Location:</strong> ${food.address}</p>
+                        </div>
+                    `;
                     results.appendChild(card);
-
                 });
-
             } catch (error) {
-
                 console.error(error);
-
                 results.innerHTML = `
-            <p>
-                ❌ Cannot connect to BatTrip backend.
-                Make sure Flask is running.
-            </p>
-        `;
+                    <p>❌ Cannot connect to BatTrip backend. Make sure Flask is running on ${API_BASE_URL}.</p>
+                `;
             }
         }
-
     </script>
 
 </body>

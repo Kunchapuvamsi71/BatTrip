@@ -41,15 +41,21 @@
             font-weight: bold;
         }
 
+        nav a:hover {
+            color: #7c3aed;
+        }
+
         .hero {
             min-height: 600px;
             padding: 100px 7%;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg,
-                    #ede9fe,
-                    #e0f2fe,
-                    #fef3c7);
+            background: linear-gradient(
+                135deg,
+                #ede9fe,
+                #e0f2fe,
+                #fef3c7
+            );
         }
 
         .hero-content {
@@ -88,6 +94,11 @@
             color: white;
             font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #6d28d9;
         }
 
         .features {
@@ -128,34 +139,61 @@
             color: white;
         }
 
-        .planner h2 {
-            font-size: 38px;
-            margin-bottom: 20px;
+        .planner p {
+            margin-top: 15px;
+            color: #d1d5db;
         }
 
         footer {
-            background: #0f172a;
-            color: white;
-            text-align: center;
             padding: 25px;
+            text-align: center;
+            background: #030712;
+            color: #9ca3af;
         }
 
         @media (max-width: 800px) {
+
             header {
                 flex-direction: column;
                 gap: 15px;
+                text-align: center;
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            nav a {
+                margin: 0 5px;
+                font-size: 14px;
             }
 
             .hero {
                 padding: 70px 7%;
+                min-height: 500px;
             }
 
             h1 {
                 font-size: 40px;
             }
 
+            .hero p {
+                font-size: 16px;
+            }
+
             .cards {
                 grid-template-columns: 1fr;
+            }
+
+            .features {
+                padding: 60px 7%;
+            }
+
+            .planner {
+                padding: 60px 7%;
             }
         }
     </style>
@@ -164,13 +202,19 @@
 <body>
 
     <header>
-        <div class="logo">🦇🕷️ BatTrip & SpiderRoam </div>
+
+        <div class="logo">
+            🦇🕷️ BatTrip & SpiderRoam
+        </div>
 
         <nav>
-            <a href="#">Home</a>
-            <a href="#features">Explore</a>
-            <a href="#planner">Trip Planner</a>
+            <a href="Index.html">Home</a>
+            <a href="explore.html">Explore</a>
+            <a href="planner.html">Trip Planner</a>
+            <a href="login.html">Login</a>
+            <a href="trips.html">My Trips</a>
         </nav>
+
     </header>
 
     <section class="hero">
@@ -211,33 +255,25 @@
             <div class="card">
                 <div style="font-size:40px;">🗺️</div>
                 <h3>Smart Routes</h3>
-                <p>
-                    Find an efficient route for multiple destinations.
-                </p>
+                <p>Find an efficient route for multiple destinations.</p>
             </div>
 
             <div class="card">
                 <div style="font-size:40px;">⛽</div>
                 <h3>Fuel Calculator</h3>
-                <p>
-                    Estimate fuel consumption and travel cost.
-                </p>
+                <p>Estimate fuel consumption and travel cost.</p>
             </div>
 
             <div class="card">
                 <div style="font-size:40px;">💰</div>
                 <h3>Budget Planner</h3>
-                <p>
-                    Calculate your complete trip expenses.
-                </p>
+                <p>Calculate your complete trip expenses.</p>
             </div>
 
             <div class="card">
                 <div style="font-size:40px;">🤖</div>
                 <h3>AI Recommendations</h3>
-                <p>
-                    Get personalized tourist place recommendations.
-                </p>
+                <p>Get personalized tourist place recommendations.</p>
             </div>
 
         </div>
@@ -248,9 +284,7 @@
 
         <h2>Ready to Plan Your Adventure?</h2>
 
-        <p>
-            Build your personalized trip with BatTrip & SpiderRoam.
-        </p>
+        <p>Build your personalized trip with BatTrip & SpiderRoam.</p>
 
         <br>
 
@@ -263,12 +297,6 @@
     <footer>
         © 2026 BatTrip & SpiderRoam | AI-Powered Smart Tourism
     </footer>
-
-    <script>
-        function startPlanning() {
-            alert("Trip Planner will be available soon!");
-        }
-    </script>
 
 </body>
 
