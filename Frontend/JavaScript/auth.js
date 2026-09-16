@@ -1,125 +1,24 @@
-// ==========================================
 // BatTrip & SpiderRoam
-// Authentication JavaScript
-// ==========================================
+// Frontend ↔ Backend API Connection
 
-const AUTH_API_URL = "http://127.0.0.1:5000";
+const API_BASE_URL = window.BATTRIP_API_BASE || "http://127.0.0.1:5000";
 
-async function registerUser(name, email, password) {
+async function getDestinations() {
     try {
-        const response = await fetch(`${AUTH_API_URL}/api/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password })
-        });
+        const response = await fetch(`${API_BASE_URL}/api/destinations`);
 
-        const result = await response.json();
-        return result;
+        if (!response.ok) {
+            throw new Error("Failed to fetch destinations");
+        }
+
+        const destinations = await response.json();
+
+        console.log("Destinations received from backend:");
+        console.log(destinations);
+
+        return destinations;
     } catch (error) {
-        console.error("Registration error:", error);
-        return { status: "error", message: "Backend is not connected." };
+        console.error("Backend connection error:", error);
+        return [];
     }
 }
-
-async function loginUser(email, password) {
-    try {
-        const response = await fetch(`${AUTH_API_URL}/api/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
-
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error("Login error:", error);
-        return { status: "error", message: "Backend is not connected." };
-    }
-}
-
-function applyProfileState() {
-    const profileName = document.getElementById("profileName");
-    const profileEmail = document.getElementById("profileEmail");
-    if (!profileName || !profileEmail) return;
-
-    const storedUser = localStorage.getItem("loggedInUser");
-    if (!storedUser) {
-        profileName.textContent = "Guest User";
-        profileEmail.textContent = "Not logged in";
-        return;
-    }
-
-    try {
-        const user = JSON.parse(storedUser);
-        profileName.textContent = user.name || "Guest User";
-        profileEmail.textContent = user.email || "Not logged in";
-    } catch (error) {
-        profileName.textContent = "Guest User";
-        profileEmail.textContent = "Not logged in";
-    }
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    applyProfileState();
-
-    const registerForm = document.getElementById("registerForm");
-    if (registerForm) {
-        const registerMessage = document.getElementById("registerMessage");
-
-        registerForm.addEventListener("submit", async function (event) {
-            event.preventDefault();
-            const name = document.getElementById("name").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirmPassword").value;
-
-            if (password !== confirmPassword) {
-                registerMessage.textContent = "Passwords do not match.";
-                registerMessage.style.color = "red";
-                return;
-            }
-
-            registerMessage.textContent = "Registering...";
-            registerMessage.style.color = "blue";
-
-            const result = await registerUser(name, email, password);
-
-            if (result.status === "success") {
-                registerMessage.textContent = "Registration successful!";
-                registerMessage.style.color = "green";
-                registerForm.reset();
-            } else {
-                registerMessage.textContent = result.message || "Registration failed.";
-                registerMessage.style.color = "red";
-            }
-        });
-    }
-
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        const loginMessage = document.getElementById("loginMessage");
-
-        loginForm.addEventListener("submit", async function (event) {
-            event.preventDefault();
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value;
-
-            loginMessage.textContent = "Logging in...";
-            loginMessage.style.color = "blue";
-
-            const result = await loginUser(email, password);
-
-            if (result.status === "success") {
-                loginMessage.textContent = "Login successful!";
-                loginMessage.style.color = "green";
-                localStorage.setItem("loggedInUser", JSON.stringify(result.user));
-                setTimeout(function () {
-                    window.location.href = "profile.html";
-                }, 1000);
-            } else {
-                loginMessage.textContent = result.message || "Invalid email or password.";
-                loginMessage.style.color = "red";
-            }
-        });
-    }
-});

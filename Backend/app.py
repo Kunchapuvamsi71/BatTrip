@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
+from config import Config
 from routes.destination_routes import destination_bp
 from routes.recommendation_routes import recommendation_bp
 from routes.location_routes import location_bp
@@ -11,7 +12,7 @@ from routes.bike_routes import bike_bp
 from routes.food_routes import food_bp
 
 app = Flask(__name__)
-
+app.config["SECRET_KEY"] = Config.SECRET_KEY
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Register all routes
@@ -37,7 +38,8 @@ def home():
 @app.route("/api/test")
 def test():
     return jsonify({
-        "message": "API connection successful!"
+        "message": "API connection successful!",
+        "status": "success"
     })
 
 

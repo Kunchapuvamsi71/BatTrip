@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Bike Rentals | BatTrip & SpiderRoam</title>
-
+    <title>Food | BatTrip & SpiderRoam</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
@@ -15,9 +13,8 @@
 
     <header>
         <h2>🦇 BatTrip & SpiderRoam 🕷️</h2>
-
         <nav>
-            <a href="index.html">Home</a>
+            <a href="Index.html">Home</a>
             <a href="explore.html">Explore</a>
             <a href="planner.html">Plan Trip</a>
             <a href="bikes.html">Bike Rentals</a>
@@ -27,61 +24,58 @@
     </header>
 
     <main>
-
         <section>
-            <h1>🏍️ Bike Rentals</h1>
-            <p>Find rental bikes available at your destination.</p>
+            <h1>🍴 Food Recommendations</h1>
+            <p>Find food places available at your destination.</p>
 
             <input type="text" id="destinationInput" placeholder="Enter destination (Example: Munnar)">
-
-            <button onclick="loadBikes()">Search Bikes</button>
+            <button onclick="loadFood()">Search Food</button>
         </section>
 
-        <section id="bikeResults">
-            <p>Enter a destination and click <b>Search Bikes</b>.</p>
+        <section id="foodResults">
+            <p>Enter a destination and click <b>Search Food</b>.</p>
         </section>
-
     </main>
 
     <script>
-        const API_BASE_URL = "http://127.0.0.1:5000";
+        const API_BASE_URL = window.BATTRIP_API_BASE || "http://127.0.0.1:5000";
 
-        async function loadBikes() {
+        async function loadFood() {
             const destination = document.getElementById("destinationInput").value.trim();
-            const results = document.getElementById("bikeResults");
+            const results = document.getElementById("foodResults");
 
             if (!destination) {
                 results.innerHTML = "<p>Please enter a destination.</p>";
                 return;
             }
 
-            results.innerHTML = "<p>🔄 Loading bike rentals...</p>";
+            results.innerHTML = "<p>🔄 Loading food places...</p>";
 
             try {
-                const response = await fetch(`${API_BASE_URL}/api/bikes?destination=${encodeURIComponent(destination)}`);
+                const response = await fetch(`${API_BASE_URL}/api/food?destination=${encodeURIComponent(destination)}`);
                 const data = await response.json();
 
                 if (!response.ok || data.status !== "success") {
-                    results.innerHTML = `<p>❌ ${data.message || "Unable to load bikes."}</p>`;
+                    results.innerHTML = `<p>❌ ${data.message || "Unable to load food places."}</p>`;
                     return;
                 }
 
-                if (!data.bikes || data.bikes.length === 0) {
-                    results.innerHTML = `<p>😔 No bike rentals found for ${destination}.</p>`;
+                if (!data.food || data.food.length === 0) {
+                    results.innerHTML = `<p>😔 No food places found for ${destination}.</p>`;
                     return;
                 }
 
                 results.innerHTML = "";
-                data.bikes.forEach(bike => {
+                data.food.forEach(food => {
                     const card = document.createElement("div");
                     card.innerHTML = `
                         <div style="border:1px solid #ddd;border-radius:12px;padding:20px;margin:15px 0;background:#ffffff;">
-                            <h2>🏍️ ${bike.shop_name}</h2>
-                            <p><strong>Bike:</strong> ${bike.bike_type}</p>
-                            <p><strong>Price:</strong> ₹${bike.price_per_day} / day</p>
-                            <p><strong>Rating:</strong> ⭐ ${bike.rating}</p>
-                            <p><strong>Location:</strong> ${bike.address}</p>
-                            <p><strong>Contact:</strong> ${bike.contact}</p>
+                            <h2>🍴 ${food.name}</h2>
+                            <p><strong>Food Type:</strong> ${food.food_type}</p>
+                            <p><strong>Average Cost:</strong> ₹${food.average_cost}</p>
+                            <p><strong>Rating:</strong> ⭐ ${food.rating}</p>
+                            <p><strong>Speciality:</strong> ${food.speciality}</p>
+                            <p><strong>Location:</strong> ${food.address}</p>
                         </div>
                     `;
                     results.appendChild(card);

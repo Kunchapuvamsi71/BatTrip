@@ -1,98 +1,253 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - BatTrip & SpiderRoam</title>
+// BatTrip & SpiderRoam
+// Complete Trip Planner + Flask Backend Connection
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
-</head>
+const PLANNER_API_URL = window.BATTRIP_API_BASE || "http://127.0.0.1:5000";
 
-<body>
+async function sendTripToBackend(tripData) {
+    const storedUser = localStorage.getItem("loggedInUser");
 
-<header>
-    <div class="container">
-        <nav>
-            <div class="logo">🦇 BatTrip & SpiderRoam 🕷️</div>
-            <a href="index.html">Home</a>
-            <a href="explore.html">Explore</a>
-            <a href="planner.html">Plan a Trip</a>
-            <a href="login.html">Login</a>
-            <a href="trips.html">My Trips</a>
-            <a href="about.html">About</a>
-        </nav>
-    </div>
-</header>
+    if (storedUser) {
+        try {
+            const user = JSON.parse(storedUser);
+            if (user.id) {
+                tripData.user_id = user.id;
+            }
+        } catch (error) {
+            console.error("User data error:", error);
+        }
+    }
 
-<main>
-    <div class="container">
+    try {
+        const response = await fetch(`${PLANNER_API_URL}/api/trip`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(tripData)
+        });
 
-        <div class="card">
-            <h1>About BatTrip & SpiderRoam</h1>
+        const result = await response.json();
 
-            <p>
-                BatTrip & SpiderRoam is an AI-powered smart tourism
-                platform designed to make travel planning easier,
-                smarter and more budget-friendly.
-            </p>
-        </div>
+        if (!response.ok) {
+            console.error("Trip API error:", result);
+            return null;
+        }
 
-        <div class="card">
-            <h2>🎯 Our Objective</h2>
+        console.log("Trip result received from backend:");
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error("Backend connection error:", error);
+        return null;
+    }
+}
 
-            <p>
-                The main objective of this project is to help travelers
-                plan trips according to their destinations, interests,
-                available budget, travel duration and transportation
-                preferences.
-            </p>
-        </div>
+function addPlace() {
+    let input = document.getElementById("destination");
+    let name = input.value.trim();
 
-        <div class="card">
-            <h2>🤖 AI & Machine Learning</h2>
+    if (name === "") {
+        alert("Enter a destination");
+        return;
+    }
 
-            <p>
-                The system uses tourism data and machine learning
-                techniques to recommend suitable tourist places based
-                on user preferences.
-            </p>
+    places.push(name);
+    input.value = "";
+    showPlaces();
+}
 
-            <p>
-                Technologies include TF-IDF, Cosine Similarity,
-                Pandas, NumPy and Scikit-learn.
-            </p>
-        </div>
+function showPlaces() {
+    let list = document.getElementById("list");
+    list.innerHTML = "";
 
-        <div class="card">
-            <h2>🛠️ Technologies</h2>
+    for (let i = 0; i < places.length; i++) {
+        let div = document.createElement("div");
+        div.className = "destination";
+        div.innerHTML = (i + 1) + ". " + places[i] + ' <button class="remove-btn" onclick="removePlace(' + i + ')">Remove</button>';
+        list.appendChild(div);
+    }
+}
 
-            <p>HTML, CSS, JavaScript</p>
-            <p>Python & Flask</p>
-            <p>MySQL</p>
-            <p>Pandas, NumPy & Scikit-learn</p>
-            <p>OpenStreetMap, OSRM & Open-Meteo</p>
-        </div>
+function removePlace(index) {
+    places.splice(index, 1);
+    showPlaces();
+}
 
-        <div class="card">
-            <h2>🌍 What You Can Do</h2>
+function useCurrentLocation() {
+    let status = document.getElementById("locationStatus");
 
-            <p>🚀 Plan multi-destination trips</p>
-            <p>💰 Estimate your travel budget</p>
-            <p>⛽ Calculate fuel requirements</p>
-            <p>🗺️ Calculate road distance</p>
-            <p>⭐ Get tourist place recommendations</p>
-            <p>🏨 Find accommodation options</p>
-            <p>🏍️ Explore bike rental options</p>
-            <p>🍴 Explore food options</p>
-        </div>
+    if (!navigator.geolocation) {
+        status.innerHTML = "❌ Location is not supported. Please enter your starting location manually.";
+        return;
+    }
 
-    </div>
-</main>
+    status.innerHTML = "📍 Getting your current location...";
 
-<footer>
-    <p>© 2026 BatTrip & SpiderRoam</p>
-</footer>
+    navigator.geolocation.getCurrentPosition(function (position) {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+        status.innerHTML = "✅ Location detected: " + latitude.toFixed(4) + ", " + longitude.toFixed(4);
+    }, function () {
+        status.innerHTML = "❌ Location permission denied. Please enter your starting location manually.";
+    });
+}
 
-</body>
-</html>
+async function getCoordinates(place) {
+    let url = "https://nominatim.openstreetmap.org/search?q=" + encodeURIComponent(place) + "&format=json&limit=1";
+
+    try {
+        let response = await fetch(url, { headers: { "User-Agent": "BatTrip-SpiderRoam" } });
+        let data = await response.json();
+
+        if (data.length === 0) {
+            return null;
+        }
+
+        return {
+            lat: parseFloat(data[0].lat),
+            lon: parseFloat(data[0].lon)
+        };
+    } catch (error) {
+        console.error("Geocoding error:", error);
+        return null;
+    }
+}
+
+async function getDistance(start, destinations) {
+    let totalDistance = 0;
+    let current = start;
+
+    for (let i = 0; i < destinations.length; i++) {
+        let next = await getCoordinates(destinations[i]);
+
+        if (!next) {
+            continue;
+        }
+
+        let url = "https://router.project-osrm.org/route/v1/driving/" + current.lon + "," + current.lat + ";" + next.lon + "," + next.lat + "?overview=false";
+
+        try {
+            let response = await fetch(url);
+            let data = await response.json();
+
+            if (data.routes && data.routes.length > 0) {
+                totalDistance += data.routes[0].distance / 1000;
+            }
+        } catch (error) {
+            console.log("Routing error:", error);
+        }
+
+        current = next;
+    }
+
+    return totalDistance;
+}
+
+async function buildTrip() {
+    let output = document.getElementById("output");
+    let startName = document.getElementById("startLocation").value.trim();
+    let days = parseInt(document.getElementById("days").value);
+    let people = parseInt(document.getElementById("people").value);
+    let budget = parseFloat(document.getElementById("budget").value);
+    let mileage = parseFloat(document.getElementById("mileage").value);
+    let petrol = parseFloat(document.getElementById("petrol").value);
+    let food = parseFloat(document.getElementById("food").value);
+    let activity = parseFloat(document.getElementById("activity").value);
+    let stay = parseFloat(document.getElementById("stay").value);
+    let transport = document.getElementById("transport").value;
+    let interest = document.getElementById("interest").value;
+
+    if (startName === "") {
+        alert("Please enter starting location.");
+        return;
+    }
+
+    if (places.length === 0) {
+        alert("Please add at least one destination.");
+        return;
+    }
+
+    if (!days || days <= 0) {
+        alert("Please enter valid travel days.");
+        return;
+    }
+
+    if (!people || people <= 0) {
+        alert("Please enter valid number of people.");
+        return;
+    }
+
+    if (!budget || budget <= 0) {
+        alert("Please enter a valid budget.");
+        return;
+    }
+
+    output.innerHTML = '<div class="result">⏳ Building your trip... Please wait.</div>';
+
+    let start = await getCoordinates(startName);
+
+    if (!start) {
+        output.innerHTML = '<div class="error">❌ Starting location not found. Please check the name.</div>';
+        return;
+    }
+
+    let distance = await getDistance(start, places);
+
+    let fuelCost = 0;
+    let rentalCost = 0;
+    let transportCost = 0;
+
+    if (transport === "Own Bike" || transport === "Own Car") {
+        let fuelNeeded = mileage > 0 ? distance / mileage : 0;
+        fuelCost = fuelNeeded * petrol;
+    } else if (transport === "Rental Bike") {
+        let fuelNeeded = mileage > 0 ? distance / mileage : 0;
+        fuelCost = fuelNeeded * petrol;
+        rentalCost = 700 * days;
+    } else if (transport === "Rental Car") {
+        let fuelNeeded = mileage > 0 ? distance / mileage : 0;
+        fuelCost = fuelNeeded * petrol;
+        rentalCost = 2500 * days;
+    } else if (transport === "Public Transport") {
+        transportCost = distance * 4;
+    }
+
+    let nights = Math.max(days - 1, 1);
+    let stayCost = stay * people * nights;
+    let foodCost = food * people * days;
+    let activityCost = activity * people;
+
+    let totalCost = fuelCost + rentalCost + transportCost + stayCost + foodCost + activityCost;
+
+    let tripPayload = {
+        start_location: startName,
+        destinations: places,
+        days: days,
+        people: people,
+        budget: budget,
+        fuel_cost: fuelCost,
+        accommodation_cost: stayCost,
+        food_cost: foodCost,
+        transport_cost: transportCost + rentalCost,
+        activity_cost: activityCost,
+        interest: interest,
+        total_cost: totalCost
+    };
+
+    let savedTrip = await sendTripToBackend(tripPayload);
+    let itineraryHtml = "";
+
+    if (savedTrip && savedTrip.status === "success") {
+        let itinerary = savedTrip.itinerary || [];
+        itineraryHtml = '<div class="result"><h3>✅ Trip Saved Successfully</h3>';
+        itinerary.forEach((day, index) => {
+            itineraryHtml += `<div class="day"><h3>Day ${index + 1}</h3><p>${day}</p></div>`;
+        });
+        itineraryHtml += `<p><strong>Total Estimated Cost:</strong> ₹${totalCost.toFixed(2)}</p>`;
+        itineraryHtml += `</div>`;
+    } else {
+        itineraryHtml = '<div class="error">❌ Unable to save trip to backend. Please try again.</div>';
+    }
+
+    output.innerHTML = itineraryHtml;
+}
