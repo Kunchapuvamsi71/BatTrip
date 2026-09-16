@@ -1,10 +1,9 @@
-name: Deploy BatTrip Frontend
+ name: Deploy BatTrip Frontend
 
 on:
   push:
     branches:
       - main
-
   workflow_dispatch:
 
 permissions:
@@ -25,47 +24,23 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      # 1. Get the repository files
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Configure GitHub Pages
-      - name: Setup GitHub Pages
+      - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # 3. Prepare website
       - name: Prepare website
         run: |
-          echo "Creating website folder..."
           mkdir -p site
+          cp -R Frontend/. site/
+          cp Frontend/Index.html site/index.html
 
-          echo "Copying main index.html..."
-          cp index.html site/
-
-          echo "Copying Frontend folder..."
-          cp -R Frontend site/
-
-          echo "Copying static files if available..."
-
-          if [ -d "Frontend/assets" ]; then
-            echo "Frontend/assets found"
-          fi
-
-          echo "Website files:"
-          find site -maxdepth 4 -type f | sort
-
-          echo "Checking index.html..."
-          test -f site/index.html
-
-          echo "index.html found successfully!"
-
-      # 4. Upload website to GitHub Pages
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
 
-      # 5. Deploy website
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
