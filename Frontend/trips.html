@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>My Trips - BatTrip & SpiderRoam</title>
+    <title>Profile - BatTrip & SpiderRoam</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -13,74 +11,44 @@
 
 <body>
 
-    <header>
-        <div class="container">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo">🦇 BatTrip & SpiderRoam 🕷️</div>
+            <a href="index.html">Home</a>
+            <a href="planner.html">Plan a Trip</a>
+            <a href="trips.html">My Trips</a>
+            <a href="login.html">Login</a>
+        </nav>
+    </div>
+</header>
 
-            <nav>
+<main>
+    <div class="container">
 
-                <div class="logo">
-                    🦇 BatTrip & SpiderRoam 🕷️
-                </div>
-
-                <a href="Index.html">
-                    Home
-                </a>
-
-            </nav>
-
-        </div>
-    </header>
-
-
-    <main>
-
-        <div class="container">
-
-            <div class="card">
-
-                <h1>🧳 My Trips</h1>
-
-                <p>
-                    View and manage your planned trips.
-                </p>
-
-            </div>
-
-
-            <!-- TRIPS WILL LOAD HERE -->
-
-            <div id="tripsContainer">
-
-                <div class="card">
-
-                    <h2>Loading your trips...</h2>
-
-                    <p>
-                        Please wait.
-                    </p>
-
-                </div>
-
-            </div>
-
+        <div class="card">
+            <h1>My Profile</h1>
+            <p>Manage your BatTrip & SpiderRoam profile.</p>
         </div>
 
-    </main>
+        <div class="card">
+            <h2>Personal Information</h2>
+            <p><strong>Name:</strong> <span id="profileName">Guest User</span></p>
+            <p><strong>Email:</strong> <span id="profileEmail">Not logged in</span></p>
+            <p><strong>Account Status:</strong> Active</p>
+        </div>
 
+        <div class="card">
+            <h2>Quick Links</h2>
+            <p><a href="planner.html">🚀 Plan a Trip</a></p>
+            <p><a href="recommendations.html">⭐ Recommendations</a></p>
+            <p><a href="trips.html">🧳 My Trips</a></p>
+        </div>
 
-    <footer>
+    </div>
+</main>
 
-        <p>
-            © 2026 BatTrip & SpiderRoam
-        </p>
-
-    </footer>
-
-
-    <!-- My Trips JavaScript -->
-
-    <script src="JavaScript/trips.js"></script>
+<script src="JavaScript/auth.js"></script>
 
 </body>
-
 </html>

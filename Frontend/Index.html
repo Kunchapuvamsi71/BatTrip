@@ -7,196 +7,8 @@
 
     <title>BatTrip & SpiderRoam</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f8fc;
-            color: #1f2937;
-        }
-
-        header {
-            background: white;
-            padding: 20px 7%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        nav a {
-            text-decoration: none;
-            margin-left: 20px;
-            color: #374151;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            color: #7c3aed;
-        }
-
-        .hero {
-            min-height: 600px;
-            padding: 100px 7%;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(
-                135deg,
-                #ede9fe,
-                #e0f2fe,
-                #fef3c7
-            );
-        }
-
-        .hero-content {
-            max-width: 750px;
-        }
-
-        .tagline {
-            color: #7c3aed;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            font-size: 55px;
-            line-height: 1.1;
-            margin-bottom: 25px;
-        }
-
-        h1 span {
-            color: #7c3aed;
-        }
-
-        .hero p {
-            font-size: 18px;
-            line-height: 1.7;
-            color: #4b5563;
-            margin-bottom: 30px;
-        }
-
-        button {
-            padding: 15px 28px;
-            border: none;
-            border-radius: 10px;
-            background: #7c3aed;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #6d28d9;
-        }
-
-        .features {
-            padding: 80px 7%;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .card h3 {
-            margin: 15px 0;
-        }
-
-        .card p {
-            color: #6b7280;
-            line-height: 1.6;
-        }
-
-        .planner {
-            padding: 80px 7%;
-            background: #111827;
-            text-align: center;
-            color: white;
-        }
-
-        .planner p {
-            margin-top: 15px;
-            color: #d1d5db;
-        }
-
-        footer {
-            padding: 25px;
-            text-align: center;
-            background: #030712;
-            color: #9ca3af;
-        }
-
-        @media (max-width: 800px) {
-
-            header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            nav {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
-            }
-
-            nav a {
-                margin: 0 5px;
-                font-size: 14px;
-            }
-
-            .hero {
-                padding: 70px 7%;
-                min-height: 500px;
-            }
-
-            h1 {
-                font-size: 40px;
-            }
-
-            .hero p {
-                font-size: 16px;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-
-            .features {
-                padding: 60px 7%;
-            }
-
-            .planner {
-                padding: 60px 7%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 
 <body>
@@ -208,7 +20,7 @@
         </div>
 
         <nav>
-            <a href="Index.html">Home</a>
+            <a href="index.html">Home</a>
             <a href="explore.html">Explore</a>
             <a href="planner.html">Trip Planner</a>
             <a href="login.html">Login</a>
@@ -218,85 +30,50 @@
     </header>
 
     <section class="hero">
-
         <div class="hero-content">
-
-            <div class="tagline">
-                AI-POWERED SMART TOURISM
-            </div>
-
-            <h1>
-                Plan Your
-                <span>Perfect Journey</span>
-            </h1>
-
-            <p>
-                Discover destinations, calculate your travel budget,
-                find efficient routes and get AI-powered travel
-                recommendations — all in one place.
-            </p>
-
-            <button onclick="window.location.href='planner.html'">
-                🚀 Start Planning
-            </button>
-
+            <div class="tagline">AI-POWERED SMART TOURISM</div>
+            <h1>Plan Your <span>Perfect Journey</span></h1>
+            <p>Discover destinations, calculate your travel budget, find efficient routes and get AI-powered travel recommendations — all in one place.</p>
+            <button onclick="window.location.href='planner.html'">🚀 Start Planning</button>
         </div>
-
     </section>
 
     <section class="features" id="features">
-
         <div class="section-title">
             <h2>Everything You Need for Your Trip</h2>
         </div>
-
         <div class="cards">
-
             <div class="card">
                 <div style="font-size:40px;">🗺️</div>
                 <h3>Smart Routes</h3>
                 <p>Find an efficient route for multiple destinations.</p>
             </div>
-
             <div class="card">
                 <div style="font-size:40px;">⛽</div>
                 <h3>Fuel Calculator</h3>
                 <p>Estimate fuel consumption and travel cost.</p>
             </div>
-
             <div class="card">
                 <div style="font-size:40px;">💰</div>
                 <h3>Budget Planner</h3>
                 <p>Calculate your complete trip expenses.</p>
             </div>
-
             <div class="card">
                 <div style="font-size:40px;">🤖</div>
                 <h3>AI Recommendations</h3>
                 <p>Get personalized tourist place recommendations.</p>
             </div>
-
         </div>
-
     </section>
 
     <section class="planner" id="planner">
-
         <h2>Ready to Plan Your Adventure?</h2>
-
         <p>Build your personalized trip with BatTrip & SpiderRoam.</p>
-
         <br>
-
-        <button onclick="window.location.href='planner.html'">
-            🚀 Build My Trip
-        </button>
-
+        <button onclick="window.location.href='planner.html'">🚀 Build My Trip</button>
     </section>
 
-    <footer>
-        © 2026 BatTrip & SpiderRoam | AI-Powered Smart Tourism
-    </footer>
+    <footer>© 2026 BatTrip & SpiderRoam | AI-Powered Smart Tourism</footer>
 
 </body>
 

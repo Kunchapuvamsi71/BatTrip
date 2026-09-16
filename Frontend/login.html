@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Login - BatTrip & SpiderRoam</title>
-
+    <title>BatTrip & SpiderRoam</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
@@ -14,86 +12,62 @@
 <body>
 
     <header>
-        <div class="container">
-
-            <nav>
-
-                <div class="logo">
-                    🦇 BatTrip & SpiderRoam 🕷️
-                </div>
-
-                <a href="Index.html">
-                    Home
-                </a>
-
-            </nav>
-
-        </div>
+        <div class="logo">🦇🕷️ BatTrip & SpiderRoam</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="explore.html">Explore</a>
+            <a href="planner.html">Trip Planner</a>
+            <a href="login.html">Login</a>
+            <a href="trips.html">My Trips</a>
+            <a href="about.html">About</a>
+        </nav>
     </header>
 
-
-    <main>
-
-        <div class="container">
-
-            <div class="card">
-
-                <h1>Login</h1>
-
-                <p>
-                    Login to manage your trips and recommendations.
-                </p>
-
-
-                <!-- LOGIN FORM -->
-
-                <form id="loginForm">
-
-                    <label for="email">
-                        Email
-                    </label>
-
-                    <input type="email" id="email" placeholder="Enter your email" required>
-
-
-                    <label for="password">
-                        Password
-                    </label>
-
-                    <input type="password" id="password" placeholder="Enter your password" required>
-
-
-                    <button type="submit">
-                        Login
-                    </button>
-
-                </form>
-
-
-                <!-- LOGIN MESSAGE -->
-
-                <p id="loginMessage"></p>
-
-
-                <p>
-                    Don't have an account?
-                    <a href="register.html">
-                        Register here
-                    </a>
-                </p>
-
-            </div>
-
+    <section class="hero">
+        <div class="hero-content">
+            <div class="tagline">AI-POWERED SMART TOURISM</div>
+            <h1>Plan Your <span>Perfect Journey</span></h1>
+            <p>Discover destinations, calculate your travel budget, find efficient routes, and get AI-powered travel recommendations — all in one place.</p>
+            <button onclick="window.location.href='planner.html'">🚀 Start Planning</button>
         </div>
+    </section>
 
-    </main>
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Everything You Need for Your Trip</h2>
+        </div>
+        <div class="cards">
+            <div class="card">
+                <div style="font-size:40px;">🗺️</div>
+                <h3>Smart Routes</h3>
+                <p>Find an efficient route for multiple destinations.</p>
+            </div>
+            <div class="card">
+                <div style="font-size:40px;">⛽</div>
+                <h3>Fuel Calculator</h3>
+                <p>Estimate fuel consumption and travel cost.</p>
+            </div>
+            <div class="card">
+                <div style="font-size:40px;">💰</div>
+                <h3>Budget Planner</h3>
+                <p>Calculate your complete trip expenses.</p>
+            </div>
+            <div class="card">
+                <div style="font-size:40px;">🤖</div>
+                <h3>AI Recommendations</h3>
+                <p>Get personalized tourist place recommendations.</p>
+            </div>
+        </div>
+    </section>
 
+    <section class="planner" id="planner">
+        <h2>Ready to Plan Your Adventure?</h2>
+        <p>Build your personalized trip with BatTrip & SpiderRoam.</p>
+        <br>
+        <button onclick="window.location.href='planner.html'">🚀 Build My Trip</button>
+    </section>
 
-    <!-- IMPORTANT:
-     JavaScript folder is named "JavaScript"
--->
-
-    <script src="JavaScript/auth.js"></script>
+    <footer>© 2026 BatTrip & SpiderRoam | AI-Powered Smart Tourism</footer>
 
 </body>
 
