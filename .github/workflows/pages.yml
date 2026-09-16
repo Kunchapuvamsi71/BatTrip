@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 permissions:
@@ -12,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: false
 
 jobs:
@@ -24,26 +25,47 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      # 1. Get the repository files
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Configure GitHub Pages
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
+      # 3. Prepare website
       - name: Prepare website
         run: |
+          echo "Creating website folder..."
           mkdir -p site
-          cp -R Frontend/. site/
+
+          echo "Copying main index.html..."
+          cp index.html site/
+
+          echo "Copying Frontend folder..."
+          cp -R Frontend site/
+
+          echo "Copying static files if available..."
+
+          if [ -d "Frontend/assets" ]; then
+            echo "Frontend/assets found"
+          fi
+
           echo "Website files:"
-          find site -maxdepth 2 -type f | sort
+          find site -maxdepth 4 -type f | sort
+
           echo "Checking index.html..."
           test -f site/index.html
 
+          echo "index.html found successfully!"
+
+      # 4. Upload website to GitHub Pages
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
 
-      - name: Deploy website
+      # 5. Deploy website
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
